@@ -40,19 +40,9 @@ http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/
    }
 }]]]></http:body>
 		</http:request>
-		<ee:transform doc:name="Transform Message" doc:id="65124f1b-3e3e-4dff-ac51-0239ca379df2" >
-			<ee:message >
-				<ee:set-payload ><![CDATA[%dw 2.0
-output application/java
----
-{
-}]]></ee:set-payload>
-			</ee:message>
-		</ee:transform>
 		<tracking:custom-event doc:name="Custom Business Event" doc:id="e4dfcbcf-29f2-4151-b517-e1bb505c4439" event-name="Track-Order-Id" >
 			<tracking:meta-data key="orderId" value="#[payload.orderId]" />
 			<tracking:meta-data key="status" value="Success" />
 		</tracking:custom-event>
-		<logger level="INFO" doc:name="Logger" doc:id="b5b2ddad-45c8-4519-8df2-1e4b80952c39" message="done"/>
 	</flow>
 </mule>
