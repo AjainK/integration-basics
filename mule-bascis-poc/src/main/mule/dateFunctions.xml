@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="dateFunctionsFlow" doc:id="837c0266-fea9-4dd9-a928-0bd281211718" >
+		<ee:transform doc:name="Transform Message" doc:id="871c8927-9046-4679-baa6-40d4e1977135" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+import * from dw::core::Dates
+
+fun convertDate(date, format) = date as Date {format: format}
+fun convertString(date, format) = date as String  {format: format}
+fun format(d: DateTime) = d as String {format: "yyyy-MM-dd'T'HH:mm:ss.SSS"}
+output application/json  
+---
+{
+  "Date in dd-MM-yyyy format": convertDate(now(), "dd-MM-yyyy"),
+  "Date in dd-MMM-yyyy format": convertDate(now(),"dd-MMM-yyyy"),
+  "Date in dd/MM/yyyy format": convertDate(now(),"dd/MM/yyyy"),
+  "Date in dd/MMM/yyyy format": convertDate(now(), "dd/MMM/yyyy"),
+  "Date in dd E, MMM, yyyy format":convertDate(now(),"dd E, MMM, yyyy"),
+  "Date in yyyy/MMM/dd format": convertDate(now(), "yyyy/MMM/dd"),
+  "Date in dd/MMM/yyyy format": convertDate(now(), "dd/MMM/yyyy"),
+  "Date in 24hr Format": convertString(now(), "dd-MM-yyyy HH:mm:ss"),
+  "Date in 12hr Format": convertString(now(), "dd-MM-yyyy hh:mm:ss a"),
+  "Type of Date in 24hr Format": typeOf(convertDate(now(), "dd-MM-yyyy HH:mm:ss")),
+  "Type of Date in 24hr Format": typeOf(convertString(now(), "dd-MM-yyyy HH:mm:ss")),
+
+  // change timezone  (even if the type is string when timezone changed, type becomes date time)
+  // eg typeOf((now() as String {format: "yyyy-MM-dd'T'HH:mm:ss.SSS"}) >> "America/Chicago") = DateTime instead of String
+   CreatedDateTime: format(now() >> "America/Chicago"),
+   //Current DateTime to specific string format(
+  "Convert to specific string":  now() as String {format: "yyyy-MM-dd"},
+  "Compare dates": "2016-03-09" < (now() as Date {format:"yyyy-MM-dd"})
+
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>
