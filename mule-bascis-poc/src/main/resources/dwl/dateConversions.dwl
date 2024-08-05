@@ -1,13 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core"
-	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
-http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-	<flow name="dateFunctionsFlow" doc:id="837c0266-fea9-4dd9-a928-0bd281211718" >
-		<ee:transform doc:name="Transform Message" doc:id="871c8927-9046-4679-baa6-40d4e1977135" >
-			<ee:message >
-				<ee:set-payload ><![CDATA[%dw 2.0
+%dw 2.0
 import * from dw::core::Dates
 
 fun convertDate(date, format) = date as Date {format: format}
@@ -39,8 +30,4 @@ output application/json
   "Another conversion example" : "2021/12/12 14.27.48" as LocalDateTime {format:"yyyy/MM/dd HH.mm.ss"} as String {format: "dd-MM-yyyy HH:mm:ss"}
 
 
-}]]></ee:set-payload>
-			</ee:message>
-		</ee:transform>
-	</flow>
-</mule>
+}
